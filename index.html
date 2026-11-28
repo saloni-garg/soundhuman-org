@@ -6,255 +6,339 @@
 <meta name="color-scheme" content="light" />
 <link rel="icon" href="data:," />
 <title>Write Like Me -- Free Voice Skill by Saloni Garg</title>
-<meta name="description" content="Give it three things you wrote. Everything it writes for you sounds like you, not like AI. Free. Open source. MIT." />
+<meta name="description" content="Rewrite AI text into your own voice. Runs locally. Nothing leaves your browser." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --black:#0A0A0A;
-    --white:#FFFFFF;
-    --grey:#F1F1F1;
-    --grey2:#E6E6E6;
-    --pink:#FFB8D1;
-    --pink-light:#FFE0EC;
-    --pink-bright:#FF6FA5;
-    --yellow:#FFD900;
-    --orange:#FF6B2C;
-    --green:#00C853;
+    --green:#499557;
+    --bg:#F4F5F4;
+    --card:#FFFFFF;
+    --border:#E3E7E3;
+    --border-strong:#CBD2CB;
+    --text:#1B1E1B;
+    --muted:#6B726B;
+    --inner:#F4F6F4;
+    --dark:#23272A;
+    --radius-card:16px;
+    --radius-input:12px;
+    --shadow-card:0 1px 2px rgba(16,24,40,.04), 0 10px 30px rgba(16,24,40,.05);
   }
-  *{box-sizing:border-box; border-radius:0 !important;}
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
   html{scroll-behavior:smooth;}
-  body{margin:0; font-family:"Inter Tight", system-ui, sans-serif; color:var(--black); background:var(--white); -webkit-font-smoothing:antialiased;}
+  body{margin:0; font-family:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif; color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased;}
   a{color:inherit;}
   button, input, textarea{font-family:inherit;}
-  button{min-height:52px; cursor:pointer;}
-  textarea{width:100%; border:2px solid var(--black); background:#fff; padding:16px; font-size:16px; line-height:1.55; resize:vertical;}
-  textarea:focus{outline:3px solid var(--black); outline-offset:2px;}
-  .mono{font-family:"Space Mono", monospace;}
-  .pixel{font-family:"Silkscreen", monospace;}
-  .dd{font-family:"Space Mono", monospace; letter-spacing:.22em; font-weight:700;}
+  button{cursor:pointer;}
+  .mono{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace;}
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px;}
 
-  /* Top strip */
-  .topstrip{background:var(--black); color:#fff; padding:10px 20px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase;}
-  .topstrip b{color:var(--yellow);}
+  /* Top bar */
+  .topbar{position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--border);}
+  .topbar-in{max-width:720px; margin:0 auto; padding:0 20px; height:60px; display:flex; align-items:center; gap:24px;}
+  .brand{font-size:19px; font-weight:800; letter-spacing:-.02em; text-decoration:none; white-space:nowrap;}
+  .brand .g{color:var(--green);}
+  .topnav{display:flex; gap:24px; margin-left:auto;}
+  .topnav a{text-decoration:none; font-size:14.5px; font-weight:500; color:#3D444B;}
+  .topnav a:hover{color:var(--text); text-decoration:underline;}
 
-  /* Section layout with left rail */
-  .section{display:grid; grid-template-columns:168px 1fr; border-top:3px solid var(--black);}
-  .rail{padding:28px 18px; border-right:3px solid var(--black); display:flex; flex-direction:column; justify-content:space-between; min-height:220px;}
-  .rail-num{font-family:"Silkscreen", monospace; font-size:72px; line-height:.9; font-weight:700; letter-spacing:-.04em;}
-  .rail-label{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; line-height:1.5; margin-top:18px; writing-mode:initial;}
-  .rail-pink{background:var(--pink);}
-  .rail-yellow{background:var(--yellow);}
-  .rail-black{background:var(--black); color:#fff;}
-  .rail-orange{background:var(--orange); color:#fff;}
-  .content{padding:44px 40px 52px; min-width:0;}
-  .content-narrow{max-width:1080px;}
+  /* Hero */
+  .hero{text-align:center; padding:64px 20px 8px; max-width:720px; margin:0 auto;}
+  .hero h1{font-size:clamp(34px, 6vw, 48px); line-height:1.15; letter-spacing:-.025em; font-weight:800; margin:0;}
+  .hero-line{font-size:18px; line-height:1.55; color:var(--text); margin:18px 0 0;}
+  .hero-small{font-size:14.5px; line-height:1.55; color:var(--muted); margin:8px 0 0;}
 
-  .kicker{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; display:inline-block; border:2px solid var(--black); padding:8px 10px; background:#fff; margin-bottom:20px;}
-  .kicker-dark{background:var(--black); color:#fff; border-color:#fff;}
-  h1{font-size:clamp(52px, 9vw, 118px); line-height:.88; letter-spacing:-.05em; font-weight:900; margin:0; text-transform:uppercase;}
-  h1 .outline{color:transparent; -webkit-text-stroke:2px var(--black);}
-  h2{font-size:clamp(36px, 5.2vw, 64px); line-height:.95; letter-spacing:-.04em; font-weight:800; margin:0 0 16px; text-transform:uppercase;}
-  h3{font-size:22px; line-height:1.05; letter-spacing:-.02em; margin:0 0 10px; font-weight:800; text-transform:uppercase;}
-  p{font-size:17px; line-height:1.6;}
-  .lead{font-size:clamp(20px, 2.6vw, 28px); line-height:1.35; font-weight:600; letter-spacing:-.02em; max-width:760px;}
+  /* Cards */
+  .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); padding:26px;}
+  .card-label{font-size:12.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#3D444B;}
   .small{font-size:14px; line-height:1.6;}
-  .muted{opacity:.75;}
+  .muted{color:var(--muted);}
 
-  .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; height:64px; padding:0 26px; border:3px solid var(--black); font-family:"Space Mono", monospace; font-size:13px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; text-decoration:none; background:#fff; color:var(--black);}
-  .btn-black{background:var(--black); color:#fff;}
-  .btn-yellow{background:var(--yellow); color:var(--black);}
-  .btn-pink{background:var(--pink); color:var(--black);}
-  .btn:active{transform:translate(2px,2px);}
-  .btn-row{display:flex; gap:14px; flex-wrap:wrap; margin-top:28px;}
+  /* Voice card */
+  .voice-card{margin-top:44px;}
+  .radios{display:flex; gap:10px 28px; flex-wrap:wrap; margin-top:16px;}
+  .radio{display:inline-flex; align-items:center; gap:9px; font-size:15.5px; font-weight:600; cursor:pointer; padding:8px 2px; min-height:44px;}
+  .radio input{width:19px; height:19px; accent-color:var(--green); margin:0; cursor:pointer;}
+  .grey-line{font-size:14.5px; line-height:1.6; color:var(--muted); margin:12px 0 0;}
+  .text-link{background:none; border:none; padding:10px 2px; min-height:44px; font-size:15px; font-weight:600; color:var(--text); text-decoration:underline; text-underline-offset:3px; text-align:left;}
+  .text-link:hover{color:#000;}
+  .samples-area{margin-top:10px; border-top:1px solid var(--border); padding-top:20px;}
+  .field label, .field-label{display:block; font-size:13px; font-weight:600; letter-spacing:.02em; color:#3D444B; margin-bottom:8px;}
+  .field + .field{margin-top:14px;}
+  textarea{width:100%; border:1px solid var(--border-strong); border-radius:var(--radius-input); background:var(--inner); padding:14px; font-size:15px; line-height:1.55; color:var(--text); resize:vertical;}
+  textarea:focus{outline:2px solid var(--green); outline-offset:1px; background:#fff;}
+  .samples-area textarea{min-height:150px;}
+  .btn-dark{display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; border-radius:999px; border:1px solid var(--dark); background:var(--dark); color:#fff; font-size:15px; font-weight:600;}
+  .btn-dark:hover{background:#000; border-color:#000;}
+  .btn-neutral{display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px; border-radius:999px; border:1px solid var(--border-strong); background:#fff; color:var(--text); font-size:14.5px; font-weight:600;}
+  .btn-neutral:hover{border-color:var(--text);}
+  .notice{font-size:13.5px; line-height:1.6; border:1px solid var(--border-strong); background:var(--inner); border-radius:var(--radius-input); padding:11px 13px; margin-top:14px; color:var(--text);}
+  .voice-summary{margin-top:10px; border-top:1px solid var(--border); padding-top:20px;}
+  .check-line{font-size:16px; font-weight:700; margin:0; display:flex; align-items:center; gap:10px;}
+  .check-mark{color:var(--green); font-weight:800; font-size:18px;}
+  .summary-row{font-size:15px; line-height:1.6; margin:12px 0 0;}
+  .conf-row{display:flex; align-items:center; gap:14px; margin-top:14px; flex-wrap:wrap;}
+  .conf-label{font-size:15px;}
+  .conf-track{flex:1; min-width:140px; height:10px; border-radius:999px; background:#E7EBE7; overflow:hidden;}
+  .conf-fill{height:100%; background:var(--green); border-radius:999px; width:0;}
+  .summary-actions{display:flex; align-items:center; gap:10px; margin-top:18px; flex-wrap:wrap;}
 
-  .stat-strip{display:grid; grid-template-columns:repeat(3,1fr); border:3px solid var(--black); margin-top:36px; background:#fff;}
-  .stat{padding:18px; border-right:3px solid var(--black);}
-  .stat:last-child{border-right:0;}
-  .stat-num{font-family:"Silkscreen", monospace; font-size:36px; line-height:1;}
-  .stat-label{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; margin-top:8px;}
-
-  /* See it */
-  .bg-grey{background:var(--grey);}
-  .bg-pink{background:var(--pink-light);}
-  .bg-black{background:var(--black); color:#fff;}
-  .compare{display:grid; grid-template-columns:1fr auto 1fr; gap:0; border:3px solid var(--black); background:#fff; margin-top:24px;}
-  .compare-box{padding:24px;}
-  .compare-box + .compare-box{border-left:3px solid var(--black);}
-  .compare-arrow{display:flex; align-items:center; justify-content:center; background:var(--yellow); border-left:3px solid var(--black); border-right:3px solid var(--black); padding:0 14px; font-family:"Silkscreen", monospace; font-size:28px;}
-  .box-label{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; display:flex; justify-content:space-between; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:2px solid var(--black);}
-  .box-text{font-size:16px; line-height:1.65; white-space:pre-line;}
-  .box-dark{background:var(--black); color:#fff;}
-  .box-dark .box-label{border-bottom-color:#fff;}
-  .word-pill{border:2px solid currentColor; padding:3px 7px; font-weight:700;}
-  .panel{border:3px solid var(--black); background:#fff; padding:24px; margin-top:20px;}
-  .panel-black{border-color:#fff; background:#111; color:#fff;}
-  .sig{display:grid; grid-template-columns:auto 1fr; gap:24px; align-items:center; border:3px solid var(--black); background:var(--yellow); padding:24px; margin-top:20px;}
-  .sig-mark{font-family:"Silkscreen", monospace; font-size:84px; line-height:.8; background:var(--black); color:var(--yellow); padding:18px 16px 10px;}
-  .sig p{font-size:19px; line-height:1.45; font-weight:600; margin:0;}
-
-  /* Try it */
-  .step{border:3px solid var(--black); background:#fff; margin-top:22px;}
-  .step-head{display:flex; justify-content:space-between; gap:16px; align-items:center; padding:16px 20px; border-bottom:3px solid var(--black); flex-wrap:wrap;}
-  .step-head h3{margin:0;}
-  .step-badge{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; border:2px solid var(--black); padding:6px 8px; background:var(--grey);}
-  .step-body{padding:20px;}
-  .samples-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;}
-  .field label{display:block; font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; margin-bottom:8px;}
-  .field textarea{min-height:150px;}
-  .privacy{border:2px solid var(--black); background:var(--yellow); padding:12px 14px; font-family:"Space Mono", monospace; font-size:12px; line-height:1.6; letter-spacing:.02em; margin-top:20px;}
-  .profile-card{border:3px solid var(--black); margin-top:18px; display:none;}
-  .profile-card.show{display:block;}
-  .profile-head{background:var(--black); color:#fff; padding:14px 18px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;}
-  .profile-head strong{font-family:"Space Mono", monospace; letter-spacing:.14em; font-size:12px; text-transform:uppercase;}
-  .profile-grid{display:grid; grid-template-columns:repeat(4,1fr); background:#fff;}
-  .pstat{padding:16px; border-right:2px solid var(--black); border-bottom:2px solid var(--black);}
+  /* Profile details (inside voice card) */
+  .profile-details{margin-top:18px; border:1px solid var(--border); border-radius:var(--radius-card); overflow:hidden;}
+  .profile-head{background:var(--inner); border-bottom:1px solid var(--border); padding:12px 16px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;}
+  .profile-head strong{font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:#3D444B;}
+  .profile-head span{font-size:11px; letter-spacing:.08em; color:var(--muted);}
+  .profile-grid{display:grid; grid-template-columns:repeat(4,1fr);}
+  .pstat{padding:13px 14px; border-right:1px solid var(--border); border-bottom:1px solid var(--border);}
   .pstat:nth-child(4n){border-right:0;}
-  .pstat-val{font-family:"Silkscreen", monospace; font-size:28px; line-height:1;}
-  .pstat-label{font-family:"Space Mono", monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; margin-top:7px; line-height:1.5;}
-  .traits{padding:16px 18px; background:var(--pink-light); border-top:1px solid var(--black);}
+  .pstat-val{font-size:21px; font-weight:800; letter-spacing:-.02em; line-height:1.1;}
+  .pstat-label{font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-top:5px; line-height:1.45;}
+  .traits{padding:14px 16px; background:#fff;}
+  .traits > strong{font-size:11px; letter-spacing:.12em; color:#3D444B;}
   .traits ul{margin:8px 0 0 18px; padding:0;}
-  .traits li{margin:6px 0; line-height:1.5;}
-  .verdict{border:3px solid var(--black); padding:18px; margin-top:16px; display:none;}
-  .verdict.show{display:block;}
-  .verdict-good{background:#D9F7E3;}
-  .verdict-mid{background:#FFF3B0;}
-  .verdict-bad{background:#FFD6D6;}
-  .verdict-title{font-size:26px; font-weight:900; letter-spacing:-.02em; text-transform:uppercase;}
-  .flag-list{margin:12px 0 0 18px; padding:0;}
-  .flag-list li{margin:8px 0; line-height:1.55;}
-  .flag-list code{font-family:"Space Mono", monospace; background:#fff; border:1.5px solid var(--black); padding:1px 5px; font-size:13px;}
-  .output-box{border:2px solid var(--black); background:var(--grey); padding:16px; white-space:pre-wrap; line-height:1.65; font-size:16px; min-height:90px; margin-top:14px; display:none;}
-  .output-box.show{display:block;}
-  .notice{font-family:"Space Mono", monospace; font-size:12px; line-height:1.6; border:2px dashed var(--black); padding:10px 12px; margin-top:12px; background:#fff;}
-  .text-btn{background:none; border:none; text-decoration:underline; font-family:"Space Mono", monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; padding:10px 6px; min-height:44px;}
-  .path-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:22px;}
-  .path-card{border:3px solid var(--black); background:#fff; padding:22px; display:flex; flex-direction:column; gap:10px;}
-  .path-card-dark{background:var(--black); color:#fff; border-color:var(--black);}
-  .path-tag{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; border:2px solid currentColor; padding:6px 8px; align-self:flex-start;}
-  .path-card h3{margin:4px 0 0;}
-  .path-card p{font-size:15px; line-height:1.6; margin:0; flex:1;}
-  .path-card .btn{width:100%; text-align:center;}
-  .path-card-dark .btn{background:var(--yellow); color:var(--black); border-color:var(--yellow);}
-  .default-banner{border:3px solid var(--black); background:var(--yellow); padding:14px 16px; margin-top:16px; display:none;}
-  .default-banner.show{display:block;}
-  .default-banner strong{font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase;}
+  .traits li{margin:6px 0; line-height:1.55; font-size:14px;}
+  .traits p{font-size:14px; line-height:1.6;}
 
-  /* How it works */
-  .four{display:grid; grid-template-columns:repeat(4,1fr); border:3px solid var(--black); margin-top:24px; background:#fff;}
-  .four-item{padding:22px; border-right:3px solid var(--black);}
-  .four-item:last-child{border-right:0;}
-  .four-num{font-family:"Silkscreen", monospace; font-size:40px; line-height:1; margin-bottom:14px;}
-  .four-item p{font-size:15px;}
+  /* Tool card */
+  .tool-card{margin-top:28px;}
+  #draftText{min-height:275px;}
+  .style-block{margin-top:24px;}
+  .cta-green{display:block; width:100%; min-height:58px; margin-top:26px; border:1px solid var(--green); background:var(--green); color:#fff; border-radius:999px; font-size:17px; font-weight:700; letter-spacing:.01em; box-shadow:0 6px 18px rgba(16,24,40,.12);}
+  .cta-green:hover{box-shadow:0 8px 22px rgba(16,24,40,.18);}
+  .cta-dark{display:block; width:100%; min-height:54px; margin-top:22px; border:1px solid var(--dark); background:var(--dark); color:#fff; border-radius:999px; font-size:16px; font-weight:700;}
+  .cta-dark:hover{background:#000; border-color:#000;}
+  .output-block{margin-top:28px;}
+  .output-area{border:1px solid var(--border-strong); border-radius:var(--radius-input); background:#fff; padding:18px; min-height:170px; white-space:pre-wrap; line-height:1.65; font-size:15.5px;}
+  .output-area .placeholder{color:var(--muted); font-size:15px;}
+  .action-row{display:flex; align-items:center; gap:6px; margin-top:10px; flex-wrap:wrap;}
+  .action-btn{background:none; border:none; font-size:14px; font-weight:600; color:#3D444B; padding:10px 10px; min-height:44px; text-decoration:underline; text-underline-offset:3px;}
+  .action-btn:hover{color:#000;}
+  .compare-view{margin-top:14px; border:1px solid var(--border); border-radius:var(--radius-input); overflow:hidden;}
+  .compare-block{padding:16px 18px;}
+  .compare-block + .compare-block{border-top:1px solid var(--border);}
+  .compare-label{font-size:11.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .compare-text{white-space:pre-wrap; line-height:1.65; font-size:15px;}
+  .under-card{text-align:center; margin-top:22px;}
+  .quiet-link{background:none; border:none; font-size:14.5px; font-weight:500; color:var(--muted); text-decoration:underline; text-underline-offset:3px; padding:10px; min-height:44px;}
+  .quiet-link:hover{color:var(--text);}
+  .privacy-line{text-align:center; font-size:13px; color:var(--muted); margin:6px 0 0;}
 
-  /* Why not */
-  .vs{display:grid; grid-template-columns:1fr 1fr; border:3px solid #fff; margin-top:24px;}
-  .vs-box{padding:24px; background:#111;}
-  .vs-box + .vs-box{border-left:3px solid #fff; background:#fff; color:var(--black);}
-  .vs-box ul{margin:12px 0 0 18px; padding:0;}
-  .vs-box li{margin:9px 0; line-height:1.55;}
+  /* Verdict */
+  .verdict{border:1px solid var(--border-strong); border-radius:var(--radius-input); padding:18px; background:#fff; margin-top:16px;}
+  .verdict-good{border-color:var(--green);}
+  .verdict-title{font-size:21px; font-weight:800; letter-spacing:-.02em;}
+  .verdict p{font-size:14.5px; line-height:1.6;}
+  .flag-list{margin:10px 0 0 18px; padding:0;}
+  .flag-list li{margin:8px 0; line-height:1.55; font-size:14.5px;}
+  .flag-list code{font-family:ui-monospace, Menlo, Consolas, monospace; background:var(--inner); border:1px solid var(--border-strong); border-radius:6px; padding:1px 5px; font-size:13px;}
 
-  /* Install */
-  .codeblock{background:var(--black); color:#fff; border:3px solid var(--black); padding:18px; display:flex; justify-content:space-between; gap:14px; align-items:center; margin-top:14px; flex-wrap:wrap;}
-  .codeblock code{font-family:"Space Mono", monospace; font-size:15px; word-break:break-all;}
-  .copy-btn{height:48px; padding:0 16px; background:var(--yellow); border:2px solid #fff; font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:700;}
-  .install-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:20px;}
-  .install-card{border:3px solid var(--black); background:#fff; padding:22px;}
+  /* Sections */
+  .section{padding:72px 0 0;}
+  .section h2{font-size:clamp(26px, 4.5vw, 34px); line-height:1.2; letter-spacing:-.025em; font-weight:800; margin:0 0 8px; text-align:center;}
+  .feature-lines{max-width:460px; margin:26px auto 0;}
+  .feature-line{display:flex; align-items:flex-start; gap:12px; font-size:16.5px; line-height:1.5; padding:11px 0; border-bottom:1px solid var(--border);}
+  .feature-line:last-child{border-bottom:0;}
+  .demo-card{background:#fff; border:1px solid var(--border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); margin-top:26px; overflow:hidden;}
+  .demo-block{padding:22px 24px;}
+  .demo-arrow{text-align:center; font-size:20px; color:var(--muted); padding:2px 0; background:var(--inner); border-top:1px solid var(--border); border-bottom:1px solid var(--border); line-height:1.4;}
+  .box-label{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#3D444B; margin-bottom:12px;}
+  .box-text{font-size:15.5px; line-height:1.65; white-space:pre-line;}
+  .under-note{text-align:center; font-size:15px; line-height:1.6; margin:20px 0 0;}
+  .under-note.small-note{font-size:13.5px; color:var(--muted); margin-top:8px;}
 
-  footer{background:var(--black); color:#fff; padding:36px 40px; border-top:3px solid var(--black);}
-  .footer-grid{display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; align-items:flex-start;}
-  .footer-big{font-family:"Silkscreen", monospace; font-size:32px; line-height:1;}
+  .docs{text-align:center;}
+  .codeblock{max-width:640px; margin:14px auto 0; background:var(--inner); border:1px solid var(--border); border-radius:var(--radius-input); padding:12px 12px 12px 18px; display:flex; justify-content:space-between; gap:14px; align-items:center; text-align:left;}
+  .codeblock code{font-family:ui-monospace, Menlo, Consolas, monospace; font-size:14.5px; word-break:break-all;}
+  .copy-btn{min-height:38px; padding:0 15px; background:#fff; color:var(--text); border:1px solid var(--border-strong); border-radius:999px; font-size:12.5px; font-weight:600; white-space:nowrap;}
+  .copy-btn:hover{border-color:var(--text);}
+  .code-label{font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:22px;}
+  .docs-line{font-size:15px; line-height:1.6; margin:20px 0 0;}
+  .docs-line a{font-weight:600;}
 
-  @media (max-width: 900px){
-    .samples-grid{grid-template-columns:1fr;}
-    .four{grid-template-columns:1fr 1fr;}
-    .four-item:nth-child(2){border-right:0;}
-    .four-item:nth-child(1), .four-item:nth-child(2){border-bottom:3px solid var(--black);}
-    .profile-grid{grid-template-columns:repeat(2,1fr);}
-    .pstat:nth-child(4n){border-right:2px solid var(--black);}
-    .pstat:nth-child(2n){border-right:0;}
-    .compare{grid-template-columns:1fr;}
-    .compare-arrow{padding:12px; border-left:0; border-right:0; border-top:3px solid var(--black); border-bottom:3px solid var(--black);}
-    .compare-box + .compare-box{border-left:0;}
-    .path-grid{grid-template-columns:1fr;}
-    .vs, .install-grid{grid-template-columns:1fr;}
-    .vs-box + .vs-box{border-left:0; border-top:3px solid #fff;}
-  }
+  footer{margin-top:72px; border-top:1px solid var(--border); background:#fff; padding:22px 20px; text-align:center; font-size:13.5px; color:var(--muted); line-height:1.7;}
+
   @media (max-width: 680px){
-    .section{grid-template-columns:1fr;}
-    .rail{flex-direction:row; align-items:center; min-height:auto; padding:14px 18px; border-right:0; border-bottom:3px solid var(--black);}
-    .rail-num{font-size:44px;}
-    .rail-label{margin-top:0; text-align:right;}
-    .content{padding:28px 18px 36px;}
-    .stat-strip{grid-template-columns:1fr;}
-    .stat{border-right:0; border-bottom:3px solid var(--black);}
-    .stat:last-child{border-bottom:0;}
-    .four{grid-template-columns:1fr;}
-    .four-item{border-right:0; border-bottom:3px solid var(--black);}
-    .four-item:last-child{border-bottom:0;}
-    .sig{grid-template-columns:1fr;}
-    .btn{width:100%;}
-    footer{padding:28px 18px;}
+    .hero{padding-top:48px;}
+    .card{padding:20px;}
+    .radios{flex-direction:column; gap:2px;}
+    .radios.inline-radios{flex-direction:row; flex-wrap:wrap; gap:4px 18px;}
+    .profile-grid{grid-template-columns:repeat(2,1fr);}
+    .pstat:nth-child(4n){border-right:1px solid var(--border);}
+    .pstat:nth-child(2n){border-right:0;}
+    .topnav{gap:16px;}
+    .section{padding-top:56px;}
   }
 </style>
 </head>
 <body>
 
-<div class="topstrip">
-  <span>WRITE LIKE ME <b>--</b> BY SALONI GARG</span>
-  <span>FREE <b>--</b> OPEN SOURCE <b>--</b> MIT</span>
-  <span class="mono">NO ACCOUNT -- NO UPLOAD -- RUNS IN YOUR BROWSER</span>
-</div>
-
-<!-- 01 HERO -->
-<section class="section" id="top">
-  <div class="rail rail-pink">
-    <div class="rail-num">01</div>
-    <div class="rail-label">Start here<br>Your own voice</div>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#top"><span class="g">Write</span> Like Me</a>
+    <nav class="topnav">
+      <a href="#see">Demo</a>
+      <a href="#docs">Docs</a>
+      <a href="https://github.com/saloni-garg/write-like-me" target="_blank" rel="noopener">GitHub</a>
+    </nav>
   </div>
-  <div class="content">
-    <div class="content-narrow">
-      <span class="kicker">A Claude / Agent Skill -- Free to try below</span>
-      <h1>Write<br><span class="outline">Like</span> Me</h1>
-      <p class="lead" style="margin-top:22px;">Give it three things you wrote. Everything it writes for you sounds like you, not like AI.</p>
-      <p style="max-width:680px;">Write Like Me reads your writing and saves what it finds in one file, <span class="mono" style="font-weight:700;">VOICE.md</span>. It uses that file each time it writes for you, rewrites a draft, or checks a draft. You own the file. You can edit it.</p>
-      <div class="btn-row">
-        <a class="btn btn-black" href="#try">Try it free -- no signup ↓</a>
-        <a class="btn" href="#see">See it work</a>
-        <a class="btn btn-yellow" href="#install">Install the skill</a>
-      </div>
-      <div class="stat-strip">
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Samples to calibrate<br>That is all it needs</div></div>
-        <div class="stat"><div class="stat-num">1</div><div class="stat-label">VOICE.md file<br>Yours to keep and edit</div></div>
-        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Jobs: Calibrate, Write,<br>Rewrite, Check</div></div>
-      </div>
-      <p class="small muted" style="margin-top:14px;">Free. Open source. MIT. Repo: <span class="mono">saloni-garg/write-like-me</span></p>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <h1>Write like yourself.</h1>
+    <p class="hero-line">Rewrite AI text into your own voice.</p>
+    <p class="hero-small">Runs locally. Nothing leaves your browser.</p>
+  </section>
+
+  <!-- VOICE CARD -->
+  <section class="card voice-card" id="voice">
+    <span class="card-label">Your Voice</span>
+    <div class="radios" role="radiogroup" aria-label="Choose a voice">
+      <label class="radio"><input type="radio" name="voice" id="voiceStandard" value="standard" checked> Standard</label>
+      <label class="radio"><input type="radio" name="voice" id="voiceMine" value="mine"> My Voice</label>
     </div>
-  </div>
-</section>
+    <p class="grey-line" id="standardLine">A plain human voice. Add your samples to make it yours.</p>
+    <button class="text-link" id="addSamplesLink" type="button">+ Add writing samples</button>
 
-<!-- 02 SEE IT -->
-<section class="section bg-grey" id="see">
-  <div class="rail rail-yellow">
-    <div class="rail-num">02</div>
-    <div class="rail-label">See it<br>Before / after</div>
-  </div>
-  <div class="content">
-    <div class="content-narrow">
-      <span class="kicker">Real demo -- calibrated from the author's own writing</span>
-      <h2>76 words in.<br>27 words out.<br>Same person.</h2>
-      <p style="max-width:700px;">The details below are made up. The voice is real. This shows what changes when a draft is written from a voice profile instead of a standard AI draft.</p>
+    <div class="samples-area" id="samplesArea" hidden>
+      <div class="field">
+        <label for="sample1">Sample 1</label>
+        <textarea id="sample1" placeholder="Paste a routine email or message you wrote..."></textarea>
+      </div>
+      <div class="field">
+        <label for="sample2">Sample 2</label>
+        <textarea id="sample2" placeholder="Paste a post, cover note, or longer email..."></textarea>
+      </div>
+      <div class="field">
+        <label for="sample3">Sample 3 -- optional</label>
+        <textarea id="sample3" placeholder="One more sample helps. Short is fine."></textarea>
+      </div>
+      <button class="text-link" id="demoSamplesBtn" type="button">No samples ready? Fill with the author's demo writing</button>
+      <div id="calibrateMsg" class="notice" hidden></div>
+      <div style="margin-top:18px;">
+        <button class="btn-dark" id="buildVoiceBtn" type="button">Build my voice</button>
+      </div>
+    </div>
 
-      <div class="compare">
-        <div class="compare-box">
-          <div class="box-label"><span>Generic AI draft</span><span class="word-pill">76 words</span></div>
-          <div class="box-text">Dear Maya, I hope this email finds you well. Thank you so much for reaching out and for the wonderful opportunity to be featured on your podcast. With regard to scheduling, I would like to propose the following availability windows for your kind consideration: Monday through Thursday, between 2:00 PM and 6:00 PM Pacific Time. Please do not hesitate to let me know if any of these options align with your schedule. Warm regards, Saloni Garg</div>
+    <div class="voice-summary" id="voiceSummary" hidden>
+      <p class="check-line"><span class="check-mark">&#10003;</span><span id="summaryCount">3 writing samples</span></p>
+      <p class="summary-row">Average sentence: <strong id="summaryAvg">0</strong> words</p>
+      <div class="conf-row">
+        <span class="conf-label">Confidence: <strong id="confWord">High</strong></span>
+        <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
+      </div>
+      <p class="summary-row muted" id="summaryBased">Based on 3 writing samples.</p>
+      <div class="summary-actions">
+        <button class="btn-neutral" id="replaceSamplesBtn" type="button">Replace samples</button>
+        <button class="text-link" id="profileToggle" type="button">Profile details</button>
+      </div>
+      <div class="profile-details" id="profileDetails" hidden>
+        <div class="profile-head">
+          <strong>Your VOICE PROFILE -- measured, not guessed</strong>
+          <span id="profileSource">FROM YOUR SAMPLES</span>
         </div>
-        <div class="compare-arrow">-&gt;</div>
-        <div class="compare-box box-dark">
-          <div class="box-label"><span>In her voice</span><span class="word-pill">27 words</span></div>
-          <div class="box-text">Hi Maya,
+        <div class="profile-grid" id="profileGrid"></div>
+        <div class="traits">
+          <strong>WHAT THIS MEANS</strong>
+          <ul id="traitList"></ul>
+          <p class="small" id="shapeLine" style="margin:12px 0 0; font-weight:700;">Shape: </p>
+          <p class="small" style="margin-bottom:0;">Top words: <span class="mono" id="topWords" style="font-weight:700;"></span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL CARD -->
+  <section class="card tool-card" id="try">
+    <div id="checkTopBar" hidden>
+      <button class="text-link" id="backToRewrite" type="button">&#8592; Back to rewrite</button>
+    </div>
+    <div class="field">
+      <label for="draftText">Your draft</label>
+      <textarea id="draftText" placeholder="Paste a draft here -- an email, a post, anything."></textarea>
+    </div>
+
+    <!-- REWRITE MODE -->
+    <div id="rewriteControls">
+      <div class="style-block">
+        <span class="field-label" id="styleLabel">Rewrite style</span>
+        <div class="radios inline-radios" role="radiogroup" aria-labelledby="styleLabel" style="margin-top:2px;">
+          <label class="radio"><input type="radio" name="style" value="same" checked> Same</label>
+          <label class="radio"><input type="radio" name="style" value="shorter"> Shorter</label>
+          <label class="radio"><input type="radio" name="style" value="formal"> More formal</label>
+          <label class="radio"><input type="radio" name="style" value="casual"> More casual</label>
+        </div>
+      </div>
+      <button class="cta-green" id="rewriteBtn" type="button">Rewrite my draft</button>
+      <div class="output-block">
+        <span class="field-label">Your rewrite</span>
+        <div class="output-area" id="rewriteOutput"><span class="placeholder">Your rewrite will appear here.</span></div>
+        <div class="compare-view" id="compareView" hidden>
+          <div class="compare-block">
+            <div class="compare-label">Your draft</div>
+            <div class="compare-text" id="compareDraft"></div>
+          </div>
+          <div class="compare-block">
+            <div class="compare-label">Your rewrite</div>
+            <div class="compare-text" id="compareRewrite"></div>
+          </div>
+        </div>
+        <div class="action-row" id="answerActions" hidden>
+          <button class="action-btn" id="copyBtn" type="button">Copy</button>
+          <button class="action-btn" id="compareBtn" type="button">Compare</button>
+          <button class="action-btn" id="tryShorterBtn" type="button">Try shorter</button>
+          <button class="action-btn" id="tryCasualBtn" type="button">Try more casual</button>
+          <button class="action-btn" id="undoBtn" type="button" hidden>Undo</button>
+        </div>
+        <div id="answerNote" class="notice" hidden></div>
+      </div>
+    </div>
+
+    <!-- CHECK MODE -->
+    <div id="checkControls" hidden>
+      <button class="cta-dark" id="checkBtn" type="button">Check my draft</button>
+      <div id="checkNotice" class="notice" hidden></div>
+      <div class="verdict" id="verdictBox" hidden>
+        <div class="verdict-title" id="verdictTitle"></div>
+        <p id="verdictSummary" style="margin:8px 0 0;"></p>
+        <ul class="flag-list" id="flagList"></ul>
+        <p class="small muted" id="verdictStats" style="margin-top:12px;"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="under-card" id="toCheckWrap">
+    <button class="quiet-link" id="toCheckLink" type="button">Or check a draft against your voice instead.</button>
+  </div>
+  <p class="privacy-line">Runs 100% in your browser. Nothing is sent or saved.</p>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <h2>One profile.</h2>
+    <div class="feature-lines">
+      <div class="feature-line"><span class="check-mark">&#10003;</span><span>Rewrite in your voice</span></div>
+      <div class="feature-line"><span class="check-mark">&#10003;</span><span>Check a draft against your voice</span></div>
+      <div class="feature-line"><span class="check-mark">&#10003;</span><span>Write new text in your voice</span></div>
+      <div class="feature-line"><span class="check-mark">&#10003;</span><span>Learns your style each time you correct it</span></div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="section" id="see">
+    <h2>See it</h2>
+    <div class="demo-card">
+      <div class="demo-block">
+        <div class="box-label">Input</div>
+        <div class="box-text">Dear Maya, I hope this email finds you well. Thank you so much for reaching out and for the wonderful opportunity to be featured on your podcast. With regard to scheduling, I would like to propose the following availability windows for your kind consideration: Monday through Thursday, between 2:00 PM and 6:00 PM Pacific Time. Please do not hesitate to let me know if any of these options align with your schedule. Warm regards, Saloni Garg</div>
+      </div>
+      <div class="demo-arrow">&#8595;</div>
+      <div class="demo-block">
+        <div class="box-label">Output</div>
+        <div class="box-text">Hi Maya,
 
 Looking forward to our chat as well!
 
@@ -263,289 +347,32 @@ I'm available Monday to Thursday between 2-6 PM PT.
 Would any of these work for you?
 
 Best, Saloni</div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="box-label"><span>Same profile, internal register</span><span>For people on her team</span></div>
-        <div class="box-text">Hey Dev -- the export job uses EXPORT_V2 ... yes it's the one we wired up in March. I've not created a ticket for the backfill but Lena mentioned it scales with row count so no separate ticket should be needed</div>
-        <p class="small" style="margin-top:14px;">A humanizer would clean this up and make it sound like the email above. Write Like Me does not. She writes in short form with her team, and in full sentences with people outside it. The profile records both ways of writing.</p>
-      </div>
-
-      <div class="sig">
-        <div class="sig-mark">--</div>
-        <div>
-          <p>Her mark is -- . AI writes an em dash. She writes a double hyphen. She uses it to open, to separate, and to pause. It is a small mark, and it is hers.</p>
-          <p class="small" style="margin-top:10px; font-weight:400;">Every writer has a mark like this. Calibrate finds yours. Check watches for it.</p>
-        </div>
       </div>
     </div>
-  </div>
-</section>
+    <p class="under-note">Her mark is -- . Calibrate finds yours.</p>
+    <p class="under-note small-note">The details are made up. The voice is real, measured from the author's own writing.</p>
+  </section>
 
-<!-- 03 TRY IT FREE -->
-<section class="section bg-pink" id="try">
-  <div class="rail rail-black">
-    <div class="rail-num">03</div>
-    <div class="rail-label">Try it free<br>Live in this page</div>
-  </div>
-  <div class="content">
-    <div class="content-narrow">
-      <span class="kicker">Instant browser version -- no account, no key</span>
-      <h2>Try it free.<br>Right here.</h2>
-      <p style="max-width:720px;">Paste your own writing. The page measures how you write and builds your profile. Then check a draft against it. This is a short version of the full skill. The full skill rewrites with the model in your agent.</p>
-      <div class="privacy">PRIVACY: RUNS 100% IN YOUR BROWSER. NOTHING IS SENT OR SAVED. CLOSE THE TAB AND IT IS GONE. YOUR SAMPLES NEVER LEAVE THIS PAGE.</div>
-
-      <div class="path-grid" aria-label="Choose how to try it">
-        <div class="path-card">
-          <span class="path-tag">Path A</span>
-          <h3>Use my own writing</h3>
-          <p>Paste 2 or 3 samples in Step 1 below. The page measures how you write and builds a profile from your words only.</p>
-          <button class="btn btn-black" id="pathABtn" type="button">Start with my samples</button>
-        </div>
-        <div class="path-card path-card-dark">
-          <span class="path-tag">Path B -- No samples needed</span>
-          <h3>Try the default human</h3>
-          <p>No upload. Skip Step 1. Use Check and Rewrite with a real human voice profile. It is ready now.</p>
-          <button class="btn" id="pathBBtn" type="button">No samples? Try the default human</button>
-        </div>
-      </div>
-      <div class="default-banner" id="defaultBanner" role="status">
-        <strong>Default human active</strong>
-        <p class="small" style="margin:6px 0 0;">You are using a real human voice profile. The profile card is below, a test draft is loaded in Step 2, and you can check or rewrite it in one click. No samples were needed.</p>
-      </div>
-
-      <!-- STEP 1 -->
-      <div class="step" id="stepCalibrate">
-        <div class="step-head">
-          <h3>Step 1 <span class="dd">--</span> Calibrate</h3>
-          <span class="step-badge">Paste 2 or 3 samples of your writing</span>
-        </div>
-        <div class="step-body">
-          <p class="small" style="margin-top:0;">Use things you wrote yourself: an email, a message, a post. Not your resume. Not something AI wrote for you. You can take names out first. Your voice stays the same.</p>
-          <div class="samples-grid">
-            <div class="field">
-              <label for="sample1">Sample 1 -- everyday email / message</label>
-              <textarea id="sample1" placeholder="Paste a routine email or message you wrote..."></textarea>
-            </div>
-            <div class="field">
-              <label for="sample2">Sample 2 -- longer piece</label>
-              <textarea id="sample2" placeholder="Paste a post, cover note, or longer email..."></textarea>
-            </div>
-            <div class="field">
-              <label for="sample3">Sample 3 -- optional</label>
-              <textarea id="sample3" placeholder="One more sample helps. Short is fine."></textarea>
-            </div>
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-black" id="calibrateBtn" type="button">Build my voice profile</button>
-            <button class="text-btn" id="demoSamplesBtn" type="button">No samples ready? Fill with the author's demo writing</button>
-          </div>
-          <div id="calibrateMsg" class="notice" style="display:none;"></div>
-
-          <div class="profile-card" id="profileCard">
-            <div class="profile-head">
-              <strong>Your VOICE PROFILE -- measured, not guessed</strong>
-              <span class="mono" id="profileSource" style="font-size:11px; letter-spacing:.1em;">FROM YOUR SAMPLES</span>
-            </div>
-            <div class="profile-grid" id="profileGrid"></div>
-            <div class="traits">
-              <strong class="mono" style="font-size:11px; letter-spacing:.14em;">WHAT THIS MEANS</strong>
-              <ul id="traitList"></ul>
-              <p class="small" id="shapeLine" style="margin:12px 0 0; font-weight:700;">Shape: </p>
-              <p class="small" style="margin-bottom:0;">Top words: <span class="mono" id="topWords" style="font-weight:700;"></span>. In the full skill, this becomes your <span class="mono">VOICE.md</span> file. You can edit it. It holds your marks, the words you never use, and how you write to different people.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div class="step" id="stepCheck">
-        <div class="step-head">
-          <h3>Step 2 <span class="dd">--</span> Check</h3>
-          <span class="step-badge">Check a draft against your profile</span>
-        </div>
-        <div class="step-body">
-          <div class="field">
-            <label for="draftText">Draft to check</label>
-            <textarea id="draftText" style="min-height:130px;" placeholder="Paste a draft here -- an email, a post, anything. Or tap Try the generic AI draft below."></textarea>
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-black" id="checkBtn" type="button">Check my draft</button>
-            <button class="text-btn" id="demoDraftBtn" type="button">Try the generic AI draft from section 02</button>
-          </div>
-          <div id="checkNotice" class="notice" style="display:none;"></div>
-          <div class="verdict" id="verdictBox">
-            <div class="verdict-title" id="verdictTitle"></div>
-            <p id="verdictSummary" style="margin:8px 0 0;"></p>
-            <ul class="flag-list" id="flagList"></ul>
-            <p class="small muted" id="verdictStats" style="margin-top:12px;"></p>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 3 -->
-      <div class="step" id="stepRewrite">
-        <div class="step-head">
-          <h3>Step 3 <span class="dd">--</span> Rewrite</h3>
-          <span class="step-badge">Instant mechanical pass</span>
-        </div>
-        <div class="step-body">
-          <p class="small" style="margin-top:0;">This button makes the basic fixes: em dashes become your <span class="mono">--</span>, filler openers come out, <span class="mono">utilize</span> becomes <span class="mono">use</span>, extra blank lines are removed. Number ranges keep a single hyphen only.</p>
-          <p class="small">A flat draft needs specifics from your own facts. The full skill brings them forward. This browser pass cannot invent them.</p>
-          <div class="btn-row" style="margin-top:10px;">
-            <button class="btn btn-yellow" id="rewriteBtn" type="button">Rewrite my draft</button>
-            <button class="btn" id="copyRewriteBtn" type="button" style="display:none;">Copy rewrite</button>
-          </div>
-          <div class="output-box" id="rewriteOutput"></div>
-          <div id="answerMeta" class="small muted" style="margin-top:10px; display:none;"></div>
-          <div style="margin-top:18px;">
-            <div class="mono" style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;">Change the answer:</div>
-            <div class="btn-row" style="margin-top:10px;">
-              <button class="btn" id="shortenBtn" type="button">Shorten it</button>
-              <button class="btn" id="formalBtn" type="button">Make it formal</button>
-              <button class="btn" id="informalBtn" type="button">Make it informal</button>
-            </div>
-            <div id="answerNote" class="notice" style="display:none;"></div>
-          </div>
-          <div class="notice" id="defaultRewriteNote" style="display:none;">DEFAULT HUMAN PATH: This pass strips the closing formulas in the never list, turns a Kind regards sign-off into Best, with no name after it, and turns any em dash into -- except in number ranges, where it uses a single hyphen. The full in-voice rewrite, with rhythm and register, runs in the skill.</div>
-          <p class="small muted">Honest note: the full skill rewrites with the model in your agent and uses your whole VOICE.md -- your rhythm, your register, and your word choice. This browser version makes the basic fixes only, so you can see the change in seconds.</p>
-        </div>
-      </div>
-
+  <!-- DOCS -->
+  <section class="section docs" id="docs">
+    <h2>Docs</h2>
+    <div class="code-label">Any agent -- skills.sh</div>
+    <div class="codeblock">
+      <code id="cmd1">npx skills add saloni-garg/write-like-me</code>
+      <button class="copy-btn" type="button" data-copy="cmd1">Copy</button>
     </div>
-  </div>
-</section>
-
-<!-- 04 HOW IT WORKS -->
-<section class="section" id="how">
-  <div class="rail rail-orange">
-    <div class="rail-num">04</div>
-    <div class="rail-label">How it works<br>Four jobs</div>
-  </div>
-  <div class="content">
-    <div class="content-narrow">
-      <span class="kicker">The full skill -- inside Claude, Codex, Cursor and more</span>
-      <h2>One profile.<br>Four jobs.</h2>
-      <div class="four">
-        <div class="four-item">
-          <div class="four-num">A</div>
-          <h3>Calibrate</h3>
-          <p>Give it three things you wrote. It measures how you write and notes your openings, closings, and marks. You correct the profile once.</p>
-        </div>
-        <div class="four-item">
-          <div class="four-num">B</div>
-          <h3>Write</h3>
-          <p>It writes new drafts from your VOICE.md. It uses short form with your team, full sentences outside, and formal words when the reader needs them.</p>
-        </div>
-        <div class="four-item">
-          <div class="four-num">C</div>
-          <h3>Rewrite</h3>
-          <p>It keeps your meaning and your facts. It changes only the words, so the draft sounds like you wrote it.</p>
-        </div>
-        <div class="four-item">
-          <div class="four-num">D</div>
-          <h3>Check</h3>
-          <p>It gives a verdict and shows the exact lines that drift, with fixes. No score on its own. If there is no profile, it will not make one up.</p>
-        </div>
-      </div>
-      <p style="max-width:700px;">The profile is the thing you keep. Tools change. A <span class="mono" style="font-weight:700;">VOICE.md</span> file in plain text works in every agent. It gets better each time you correct it.</p>
+    <div class="code-label">Claude Code -- plugin marketplace</div>
+    <div class="codeblock">
+      <code id="cmd2">/plugin marketplace add saloni-garg/write-like-me</code>
+      <button class="copy-btn" type="button" data-copy="cmd2">Copy</button>
     </div>
-  </div>
-</section>
+    <p class="docs-line">Free. Open source. MIT.</p>
+    <p class="docs-line">Full guide on GitHub: <a href="https://github.com/saloni-garg/write-like-me" target="_blank" rel="noopener">github.com/saloni-garg/write-like-me</a></p>
+  </section>
 
-<!-- 05 WHY NOT A HUMANIZER -->
-<section class="section bg-black" id="why">
-  <div class="rail rail-pink">
-    <div class="rail-num">05</div>
-    <div class="rail-label">Humanizer<br>comparison</div>
-  </div>
-  <div class="content">
-    <div class="content-narrow">
-      <span class="kicker kicker-dark" style="background:#000;">The difference in one section</span>
-      <h2 style="color:#fff;">A humanizer makes it<br>sound less like AI.<br>This makes it sound like you.</h2>
-      <div class="vs">
-        <div class="vs-box">
-          <div class="mono" style="font-size:11px; letter-spacing:.16em;">A HUMANIZER</div>
-          <h3 style="margin-top:10px;">Removes AI tells, once</h3>
-          <ul>
-            <li>Removes common AI tells from one draft</li>
-            <li>Same result for every writer</li>
-            <li>Would "fix" your shorthand, your marks, your quirks -- the things that prove it is you</li>
-            <li>Nothing is saved. The next draft starts from zero</li>
-          </ul>
-        </div>
-        <div class="vs-box">
-          <div class="mono" style="font-size:11px; letter-spacing:.16em;">WRITE LIKE ME</div>
-          <h3 style="margin-top:10px;">Learns your voice and keeps it</h3>
-          <ul>
-            <li>Builds a voice profile from your writing and keeps it</li>
-            <li>Different for every writer -- because it is yours</li>
-            <li>One profile per way you write: team, outside, formal, public</li>
-            <li>Lives in a <span class="mono">VOICE.md</span> file you own and correct</li>
-          </ul>
-        </div>
-      </div>
-      <p style="color:#ddd; max-width:700px;">Sounding less like AI is not enough. The draft has to sound like you. That is why the profile matters more than the cleanup.</p>
-    </div>
-  </div>
-</section>
+</main>
 
-<!-- 06 INSTALL -->
-<section class="section bg-grey" id="install">
-  <div class="rail rail-yellow">
-    <div class="rail-num">06</div>
-    <div class="rail-label">Install<br>Free forever</div>
-  </div>
-  <div class="content">
-    <div class="content-narrow">
-      <span class="kicker">Free. Open source. MIT.</span>
-      <h2>Install it.<br>Keep your voice.</h2>
-      <p style="max-width:700px;">Repo: <span class="mono" style="font-weight:700;">saloni-garg/write-like-me</span>. Pick your tool. It takes three samples and about two minutes.</p>
-
-      <div class="mono" style="font-size:11px; letter-spacing:.14em; margin-top:22px;">ANY AGENT -- SKILLS.SH</div>
-      <div class="codeblock">
-        <code id="cmd1">npx skills add saloni-garg/write-like-me</code>
-        <button class="copy-btn" type="button" data-copy="cmd1">Copy</button>
-      </div>
-
-      <div class="mono" style="font-size:11px; letter-spacing:.14em; margin-top:20px;">CLAUDE CODE -- PLUGIN MARKETPLACE</div>
-      <div class="codeblock">
-        <code id="cmd2">/plugin marketplace add saloni-garg/write-like-me</code>
-        <button class="copy-btn" type="button" data-copy="cmd2">Copy</button>
-      </div>
-
-      <div class="install-grid">
-        <div class="install-card">
-          <h3>Claude.ai / Cowork</h3>
-          <p class="small">Upload the skill folder. Or paste your <span class="mono">VOICE.md</span> into a Project. The profile stays with you when you change tools.</p>
-        </div>
-        <div class="install-card">
-          <h3>What you get</h3>
-          <p class="small">The skill (<span class="mono">SKILL.md</span>), the voice guide, the AI tells list (your real habits come first), the register guide, a stats script, and the VOICE.md template. MIT license. Fork it and change it to fit you.</p>
-        </div>
-      </div>
-      <div class="btn-row">
-        <a class="btn btn-black" href="#try">Try the free demo again ↑</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-big">WRITE LIKE ME --</div>
-      <p class="mono" style="font-size:12px; letter-spacing:.08em; line-height:1.8; color:#ccc; max-width:520px;">GIVE IT THREE THINGS YOU WROTE. EVERYTHING IT WRITES FOR YOU SOUNDS LIKE YOU, NOT LIKE AI.</p>
-    </div>
-    <div class="mono" style="font-size:12px; line-height:2; letter-spacing:.06em;">
-      BY SALONI GARG<br>
-      FREE. OPEN SOURCE. MIT LICENSE.<br>
-      REPO: SALONI-GARG/WRITE-LIKE-ME<br>
-      <span style="color:#888;">THIS PAGE RUNS LOCALLY. YOUR WRITING STAYS IN YOUR BROWSER.</span>
-    </div>
-  </div>
-</footer>
+<footer>Write Like Me by Saloni Garg. This page runs locally. Your writing stays in your browser.</footer>
 
 <script>
 (function(){
@@ -562,6 +389,9 @@ Best, Saloni</div>
   }
   function wordsOf(text){
     return text.trim().split(/\s+/).filter(function(w){return w.length>0;});
+  }
+  function countWords(text){
+    return text && text.trim() ? text.trim().split(/\s+/).filter(function(w){return w.length>0;}).length : 0;
   }
   function fmtShapeNum(v){
     var r = Math.round(v*10)/10;
@@ -583,7 +413,6 @@ Best, Saloni</div>
     sentences.forEach(function(s){ if(wordsOf(s).length <= 6) shortCount++; });
     var shortPct = sentences.length ? Math.round((shortCount/sentences.length)*100) : 0;
     var contractions = (text.match(/\b\w+['\u2019](t|s|re|ve|ll|d|m)\b/gi) || []).length;
-    // also count n't forms already covered; add common full check
     var contrPer100 = total ? Math.round((contractions/total)*1000)/10 : 0;
     var excl = (text.match(/!/g)||[]).length;
     var ques = (text.match(/\?/g)||[]).length;
@@ -591,7 +420,6 @@ Best, Saloni</div>
     var dbl = (text.match(/--/g)||[]).length;
     var commas = (text.match(/,/g)||[]).length;
     var commasPerSent = Math.round((commas/sentCount)*10)/10;
-    // top content words
     var freq = {};
     var contentTotal = 0;
     words.forEach(function(w){
@@ -604,7 +432,6 @@ Best, Saloni</div>
     var top = Object.keys(freq).sort(function(a,b){return freq[b]-freq[a];}).slice(0,8);
     var uniqueContent = Object.keys(freq).length;
     var vocabDiversity = contentTotal ? Math.round((uniqueContent/contentTotal)*100) : 0;
-    // sentence spread: standard deviation of sentence lengths in words (population)
     var sentLens = sentences.map(function(s){ return wordsOf(s).length; });
     var spread = 0;
     if(sentLens.length > 1){
@@ -614,7 +441,6 @@ Best, Saloni</div>
     } else {
       spread = 0;
     }
-    // concrete specifics: proper nouns plus numbers
     var notProper = {"It":1,"This":1,"That":1,"There":1,"Here":1,"He":1,"She":1,"They":1,"We":1,"You":1,"His":1,"Her":1,"Their":1,"Our":1,"Your":1,"Thank":1,"Please":1,"Dear":1};
     var properCount = 0;
     sentences.forEach(function(s){
@@ -657,48 +483,11 @@ Best, Saloni</div>
   var currentProfile = null;
   var isDemoProfile = false;
   var isDefaultProfile = false;
+  var mySampleCount = 0;
 
   function makeDefaultProfile(){
     return { totalWords: 200, sentenceCount: 18, avgLen: 11.2, shortPct: 38, contractions: 6, contrPer100: 3.0, excl: 1, ques: 1, emDash: 0, dbl: 4, commasPerSent: 0.5, topWords: ["point","first","exactly","please","thanks"], sentences: [], specificsPer100: 8, vocabDiversity: 88, sentenceSpread: 5.2 };
   }
-  function renderDefaultProfile(){
-    var grid = document.getElementById("profileGrid");
-    var items = [
-      ["<13", "Avg words / sentence -- external"],
-      ["Short", "Sentence length"],
-      ["--", "Signature mark"],
-      ["0", "Em dashes / en dashes"],
-      ["1 max", "Exclamation marks"],
-      ["Sparse", "Commas -- line breaks do the work"],
-      ["Yes", "Contractions -- both registers"],
-      ["2", "Registers -- internal / external"]
-    ];
-    grid.innerHTML = items.map(function(it){
-      return '<div class="pstat"><div class="pstat-val" style="font-size:22px;">'+it[0]+'</div><div class="pstat-label">'+it[1]+'</div></div>';
-    }).join("");
-    var traits = [
-      "Direct and brief. Point first, context only if needed. Shorthand with people who share the context, clean and polite with people who do not.",
-      "Average sentence: short (under 13 words in external writing).",
-      "Signature mark: \"--\" double hyphen for openers, separators, and pauses only. Number ranges always use a single hyphen (for example 2-6, 3-8 PM, 10-15), never \"--\". Em dashes and en dashes: 0. Any em dash in a draft is drift.",
-      "Exclamation: at most 1, in the opening warmth line only (external writing).",
-      "Commas: sparse, line breaks do the work.",
-      "Contractions: yes, both registers.",
-      "Openings: external \"Hi [Name],\" then one warmth line; internal \"Hey [Name] --\".",
-      "Closings: a real question at the end, not a formula.",
-      "Sign-off: external \"Best,\" (no name in this path); internal: none at all.",
-      "Never list: \"I hope this email finds you well\", \"please do not hesitate\", \"thank you for your time and consideration\", \"I look forward to your response\" as a closing line, leverage, circle back, seamless, delve, utilize.",
-      "Structure: one point per paragraph, facts on their own lines, points answered in order."
-    ];
-    document.getElementById("traitList").innerHTML = traits.map(function(x){return "<li>"+x+"</li>";}).join("");
-    var shapeElDef = document.getElementById("shapeLine");
-    if(shapeElDef) shapeElDef.textContent = shapeLineText(makeDefaultProfile());
-    document.getElementById("topWords").textContent = "point, first, context, needed";
-    document.getElementById("profileSource").textContent = "DEFAULT HUMAN";
-    var headStrong = document.querySelector("#profileCard .profile-head strong");
-    if(headStrong) headStrong.textContent = "DEFAULT HUMAN -- A REAL HUMAN VOICE PROFILE";
-    document.getElementById("profileCard").classList.add("show");
-  }
-
   function demoProfile(){
     var combined = DEMO_SAMPLE_1 + " " + DEMO_SAMPLE_2;
     var a = analyze(combined);
@@ -727,202 +516,109 @@ Best, Saloni</div>
     if(shapeEl) shapeEl.textContent = shapeLineText(a);
     document.getElementById("topWords").textContent = a.topWords.length ? a.topWords.join(", ") : "not enough text yet";
     document.getElementById("profileSource").textContent = sourceLabel;
-    document.getElementById("profileCard").classList.add("show");
   }
+
+  function confidenceFor(totalWords){
+    if(totalWords >= 300) return { word: "High", pct: 100 };
+    if(totalWords >= 100) return { word: "Medium", pct: 70 };
+    return { word: "Low", pct: 40 };
+  }
+
+  /* ---------- Voice card ---------- */
+  var voiceStandard = document.getElementById("voiceStandard");
+  var voiceMine = document.getElementById("voiceMine");
+  var samplesArea = document.getElementById("samplesArea");
+  var voiceSummary = document.getElementById("voiceSummary");
+  var standardLine = document.getElementById("standardLine");
+  var addSamplesLink = document.getElementById("addSamplesLink");
+
+  function selectStandard(){
+    voiceStandard.checked = true;
+    currentProfile = makeDefaultProfile();
+    isDefaultProfile = true;
+    isDemoProfile = false;
+    samplesArea.hidden = true;
+    voiceSummary.hidden = true;
+    standardLine.hidden = false;
+    addSamplesLink.hidden = false;
+  }
+  function selectMine(openSamples){
+    voiceMine.checked = true;
+    isDefaultProfile = false;
+    standardLine.hidden = true;
+    if(currentProfile && !isDemoProfile && mySampleCount > 0 && !openSamples){
+      samplesArea.hidden = true;
+      voiceSummary.hidden = false;
+      addSamplesLink.hidden = true;
+    } else {
+      voiceSummary.hidden = true;
+      samplesArea.hidden = false;
+      addSamplesLink.hidden = true;
+      setTimeout(function(){ var el = document.getElementById("sample1"); if(el) el.focus(); }, 100);
+    }
+  }
+  voiceStandard.addEventListener("change", function(){ if(voiceStandard.checked) selectStandard(); });
+  voiceMine.addEventListener("change", function(){ if(voiceMine.checked) selectMine(false); });
+  addSamplesLink.addEventListener("click", function(){ selectMine(true); });
 
   document.getElementById("demoSamplesBtn").addEventListener("click", function(){
     document.getElementById("sample1").value = DEMO_SAMPLE_1;
     document.getElementById("sample2").value = DEMO_SAMPLE_2;
     document.getElementById("sample3").value = "";
     var msg = document.getElementById("calibrateMsg");
-    msg.style.display = "block";
-    msg.textContent = "Filled with the author's demo writing. The details are made up. The habits are real. Note the \"--\". Now press Build my voice profile.";
+    msg.hidden = false;
+    msg.textContent = "Filled with the author's demo writing. The details are made up. The habits are real. Note the \"--\". Now press Build my voice.";
   });
 
-  document.getElementById("calibrateBtn").addEventListener("click", function(){
-    var combined = [document.getElementById("sample1").value, document.getElementById("sample2").value, document.getElementById("sample3").value].join("\n\n").trim();
+  document.getElementById("buildVoiceBtn").addEventListener("click", function(){
+    var s1 = document.getElementById("sample1").value;
+    var s2 = document.getElementById("sample2").value;
+    var s3 = document.getElementById("sample3").value;
+    var combined = [s1, s2, s3].join("\n\n").trim();
     var msg = document.getElementById("calibrateMsg");
     if(wordsOf(combined).length < 25){
-      msg.style.display = "block";
+      msg.hidden = false;
       msg.textContent = "That is too little to measure -- add at least about 25 words across your samples, or use the demo fill above.";
       return;
     }
+    var count = [s1, s2, s3].filter(function(s){ return s.trim().length > 0; }).length;
     var a = analyze(combined);
     currentProfile = a;
     isDemoProfile = false;
     isDefaultProfile = false;
-    document.getElementById("defaultBanner").classList.remove("show");
-    document.getElementById("defaultRewriteNote").style.display = "none";
-    var hs = document.querySelector("#profileCard .profile-head strong");
-    if(hs) hs.textContent = "Your VOICE PROFILE -- measured, not guessed";
-    msg.style.display = "block";
-    msg.textContent = "Profile built from " + a.totalWords + " words in " + a.sentenceCount + " sentences. Now paste a draft in Step 2 and check it against this voice.";
+    mySampleCount = count;
+    msg.hidden = true;
     renderProfile(a, "FROM YOUR SAMPLES -- IN THIS TAB ONLY");
-    document.getElementById("checkNotice").style.display = "none";
+    document.getElementById("summaryCount").textContent = count + (count === 1 ? " writing sample" : " writing samples");
+    document.getElementById("summaryAvg").textContent = a.avgLen;
+    var conf = confidenceFor(a.totalWords);
+    document.getElementById("confWord").textContent = conf.word;
+    document.getElementById("confFill").style.width = conf.pct + "%";
+    document.getElementById("summaryBased").textContent = "Based on " + count + (count === 1 ? " writing sample." : " writing samples.");
+    document.getElementById("profileDetails").hidden = true;
+    document.getElementById("profileToggle").textContent = "Profile details";
+    samplesArea.hidden = true;
+    voiceSummary.hidden = false;
+    addSamplesLink.hidden = true;
   });
 
-  document.getElementById("pathABtn").addEventListener("click", function(){
-    document.getElementById("stepCalibrate").scrollIntoView({behavior:"smooth", block:"start"});
-    setTimeout(function(){ var el=document.getElementById("sample1"); if(el) el.focus(); }, 350);
-  });
-  document.getElementById("pathBBtn").addEventListener("click", function(){
-    currentProfile = makeDefaultProfile();
-    isDefaultProfile = true;
-    isDemoProfile = false;
-    renderDefaultProfile();
-    document.getElementById("defaultBanner").classList.add("show");
-    document.getElementById("defaultRewriteNote").style.display = "block";
+  document.getElementById("replaceSamplesBtn").addEventListener("click", function(){
+    voiceSummary.hidden = true;
+    samplesArea.hidden = false;
+    addSamplesLink.hidden = true;
     var msg = document.getElementById("calibrateMsg");
-    msg.style.display = "block";
-    msg.textContent = "Default human active -- no samples needed. Profile card below shows the default human. A test draft is loaded in Step 2.";
-    document.getElementById("draftText").value = DEFAULT_TEST_DRAFT;
-    var notice = document.getElementById("checkNotice");
-    notice.style.display = "block";
-    notice.textContent = "Checking against the default human -- a real human voice profile. Hit Check my draft, then Rewrite in Step 3.";
-    setTimeout(function(){
-      document.getElementById("stepCheck").scrollIntoView({behavior:"smooth", block:"start"});
-    }, 250);
+    msg.hidden = true;
+    setTimeout(function(){ var el = document.getElementById("sample1"); if(el) el.focus(); }, 100);
   });
 
-  document.getElementById("demoDraftBtn").addEventListener("click", function(){
-    document.getElementById("draftText").value = GENERIC_DRAFT;
+  document.getElementById("profileToggle").addEventListener("click", function(){
+    var det = document.getElementById("profileDetails");
+    det.hidden = !det.hidden;
+    this.textContent = det.hidden ? "Profile details" : "Hide profile details";
   });
 
-  var AI_TELLS = [
-    {key:"delve", label:"delve"},
-    {key:"leverage", label:"leverage (as a verb)"},
-    {key:"utilize", label:"utilize"},
-    {key:"seamless", label:"seamless"},
-    {key:"robust", label:"robust"},
-    {key:"circle back", label:"circle back"},
-    {key:"i hope this email finds you well", label:"I hope this email finds you well"},
-    {key:"please do not hesitate", label:"please do not hesitate"},
-    {key:"furthermore", label:"furthermore"},
-    {key:"pivotal", label:"pivotal"},
-    {key:"game-changer", label:"game-changer"},
-    {key:"game changer", label:"game changer"},
-    {key:"thank you for your time and consideration", label:"thank you for your time and consideration"},
-    {key:"i look forward to your response", label:"I look forward to your response (closing formula)"},
-    {key:"thank you for taking the time", label:"thank you for taking the time to engage (ceremonial)"},
-    {key:"i would like to extend an invitation", label:"I would like to extend an invitation"},
-    {key:"please let me know if you require any additional information", label:"please let me know if you require any additional information"}
-  ];
-
-  document.getElementById("checkBtn").addEventListener("click", function(){
-    var draft = document.getElementById("draftText").value.trim();
-    var notice = document.getElementById("checkNotice");
-    var box = document.getElementById("verdictBox");
-    if(wordsOf(draft).length < 8){
-      notice.style.display = "block";
-      notice.textContent = "Paste a longer draft to check -- at least a couple of sentences.";
-      box.classList.remove("show");
-      return;
-    }
-    var profile = currentProfile;
-    var usedDemo = false;
-    if(!profile){
-      profile = demoProfile();
-      usedDemo = true;
-    }
-    if(isDefaultProfile){
-      notice.style.display = "block";
-      notice.textContent = "Checking against the default human -- a real human voice profile (DEFAULT HUMAN card in Step 1).";
-    } else if(usedDemo){
-      notice.style.display = "block";
-      notice.textContent = "No profile built yet, so this check uses the demo profile from the author's samples in section 02. Build your own in Step 1 for a check against your voice, or use Path B for the default human.";
-    } else if(isDemoProfile){
-      notice.style.display = "block";
-      notice.textContent = "Checking against the demo profile.";
-    } else {
-      notice.style.display = "block";
-      notice.textContent = "Checking against your profile from Step 1 (" + profile.totalWords + " words measured).";
-    }
-    var d = analyze(draft);
-    var flags = [];
-    var lower = draft.toLowerCase();
-
-    if(d.emDash > 0){
-      flags.push("Em dash found ("+d.emDash+") -- your mark is \"--\", not an em dash. Every em dash is drift.");
-      // show offending sentences
-      d.sentences.forEach(function(s){
-        if(s.indexOf("\u2014")>-1 || s.indexOf("\u2013")>-1) flags.push("Line: \""+s.slice(0,140)+"\"");
-      });
-    }
-    if(/\d\s*--\s*\d/.test(draft)){
-      var rangeMatches = draft.match(/\d\s*--\s*\d/g) || [];
-      flags.push("Number range drift: a double hyphen between numbers is not correct. Ranges take a single hyphen only (for example 2-6, 3-8 PM, 10-15). Found "+rangeMatches.length+" range(s) to fix. A single hyphen between numbers is correct.");
-    }
-    AI_TELLS.forEach(function(t){
-      if(lower.indexOf(t.key) > -1){
-        flags.push("AI tell: <code>"+t.label+"</code> -- not in your voice profile. Cut it or say it plainly.");
-      }
-    });
-    if(isDefaultProfile){
-      if(d.excl > 1) flags.push("Exclamation drift for the default human: at most 1, in the opening warmth line only. This draft uses "+d.excl+".");
-      if(lower.indexOf("kind regards") > -1) flags.push("Sign-off drift for the default human: Kind regards is not the sign-off. External sign-off is <code>Best,</code> with no name after it in this path.");
-      if(lower.indexOf("i hope you will consider") > -1) flags.push("Closing drift: <code>I hope you will consider attending</code> is a formula. The default human closes with a real question.");
-    }
-    var lenDiff = Math.abs(d.avgLen - profile.avgLen);
-    if(lenDiff > 5 && d.avgLen > profile.avgLen * 1.4){
-      flags.push("Sentence length drift: this draft averages "+d.avgLen+" words per sentence, your profile averages "+profile.avgLen+". It will read slower and more formal than you.");
-    } else if(lenDiff > 5 && d.avgLen < profile.avgLen * 0.6){
-      flags.push("Sentence length drift: this draft averages "+d.avgLen+" words per sentence, your profile averages "+profile.avgLen+". It reads choppier than you write.");
-    }
-    // exclamation habit: compare rate per 100 words
-    var profExclRate = profile.totalWords ? (profile.excl/profile.totalWords)*100 : 0;
-    var draftExclRate = d.totalWords ? (d.excl/d.totalWords)*100 : 0;
-    if(profile.excl === 0 && d.excl >= 2){
-      flags.push("Exclamation drift: your samples use 0 exclamation marks, this draft uses "+d.excl+". That forced warmth is not your habit.");
-    } else if(Math.abs(draftExclRate - profExclRate) > 4){
-      flags.push("Exclamation drift: draft uses "+d.excl+" ("+Math.round(draftExclRate*10)/10+" per 100 words) vs your habit of "+profile.excl+" in your samples.");
-    }
-    if(profile.dbl > 0 && d.dbl === 0 && d.totalWords > 40){
-      flags.push("Missing mark: your profile uses \"--\" "+profile.dbl+" time(s), this longer draft uses it 0 times. Not proof on its own, worth a look.");
-    }
-    // Shape flags: flat shape when a draft stays general or uniform against a specific, varied profile
-    if(profile.specificsPer100 != null && d.specificsPer100 != null){
-      if(profile.specificsPer100 >= 3 && d.specificsPer100 < profile.specificsPer100 * 0.5){
-        flags.push("Flat shape: the draft has " + fmtShapeNum(d.specificsPer100) + " specifics per 100 words. Your samples have " + fmtShapeNum(profile.specificsPer100) + ". The draft stays general where you get specific.");
-      }
-    }
-    if(profile.sentenceSpread != null && d.sentenceSpread != null){
-      if(profile.sentenceSpread >= 4 && d.sentenceSpread < profile.sentenceSpread * 0.4){
-        flags.push("Flat shape: your sentence lengths barely change. Your samples vary much more.");
-      }
-    }
-
-    var title, summary, cls;
-    if(flags.length === 0){
-      title = "Sounds like you";
-      summary = "No drift flags against this profile. Rhythm, marks, and word choice line up.";
-      cls = "verdict verdict-good show";
-    } else if(flags.length <= 2){
-      title = "Mostly you";
-      summary = flags.length + " flag(s) -- close, with a few lines that drift. Fix those and it passes.";
-      cls = "verdict verdict-mid show";
-    } else {
-      title = "Drifting";
-      summary = flags.length + " flags -- this reads more like generic AI than like your profile. Rewrite is your fastest fix.";
-      cls = "verdict verdict-bad show";
-    }
-    document.getElementById("verdictTitle").textContent = title;
-    document.getElementById("verdictSummary").textContent = summary;
-    document.getElementById("flagList").innerHTML = flags.length ? flags.map(function(f){return "<li>"+f+"</li>";}).join("") : "<li>No flagged words, marks, or rhythm drift found.</li>";
-    document.getElementById("verdictStats").textContent = "Draft: " + d.totalWords + " words, " + d.avgLen + " words/sentence, " + d.excl + " exclamation(s), " + d.dbl + "x \"--\", " + d.emDash + "x em dash. Profile: " + profile.avgLen + " words/sentence.";
-    box.className = cls;
-    box.scrollIntoView({behavior:"smooth", block:"nearest"});
-  });
-
-  document.getElementById("rewriteBtn").addEventListener("click", function(){
-    var draft = document.getElementById("draftText").value;
-    var outBox = document.getElementById("rewriteOutput");
-    var copyBtn = document.getElementById("copyRewriteBtn");
-    if(!draft.trim()){
-      outBox.textContent = "Paste a draft in Step 2 first, then hit Rewrite.";
-      outBox.classList.add("show");
-      copyBtn.style.display = "none";
-      return;
-    }
+  /* ---------- Rewrite engine (unchanged behavior) ---------- */
+  function baseRewrite(draft){
     var out = draft;
     out = out.replace(/(\d)\s*[\u2014\u2013]\s*(\d)/g, "$1-$2");
     out = out.replace(/\u2014/g, " -- ").replace(/\u2013/g, " -- ");
@@ -947,45 +643,8 @@ Best, Saloni</div>
     out = out.replace(/[ \t]{2,}/g, " ");
     out = out.replace(/\n{3,}/g, "\n\n");
     out = out.replace(/^\s+/, "").replace(/\s+$/, "");
-    // tidy space before punctuation after replacements
     out = out.replace(/\s+([.,!?])/g, "$1");
-    outBox.textContent = out;
-    outBox.classList.add("show");
-    copyBtn.style.display = "inline-flex";
-    copyBtn.textContent = "Copy rewrite";
-    updateAnswerMeta(out);
-    document.getElementById("answerNote").style.display = "none";
-  });
-
-  function countWords(text){
-    return text.trim() ? text.trim().split(/\s+/).filter(function(w){return w.length>0;}).length : 0;
-  }
-  function updateAnswerMeta(text){
-    var meta = document.getElementById("answerMeta");
-    if(!meta) return;
-    if(!text.trim()){ meta.style.display = "none"; return; }
-    meta.textContent = countWords(text) + " words";
-    meta.style.display = "block";
-  }
-  function getAnswerOrNote(){
-    var box = document.getElementById("rewriteOutput");
-    var text = (box.textContent || "").trim();
-    var note = document.getElementById("answerNote");
-    if(!text){
-      note.style.display = "block";
-      note.textContent = "Run Rewrite first.";
-      return null;
-    }
-    note.style.display = "none";
-    return text;
-  }
-  function setAnswer(text){
-    var box = document.getElementById("rewriteOutput");
-    box.textContent = text;
-    box.classList.add("show");
-    var copyBtn = document.getElementById("copyRewriteBtn");
-    copyBtn.style.display = "inline-flex";
-    updateAnswerMeta(text);
+    return out;
   }
   function hasDateOrNumber(s){
     if(/\d/.test(s)) return true;
@@ -1002,25 +661,20 @@ Best, Saloni</div>
     out = out.replace(/\bat this point in time\b/gi, "now");
     out = out.replace(/Please do not hesitate to reach out\.?\s*/gi, "");
     out = out.replace(/Thank you for your time and consideration\.?\s*/gi, "");
-    // Remove bracketed parts that hold no date, number, or name placeholder
     out = out.replace(/\[[^\]]*\]/g, function(m){
-      // Keep name placeholders such as [Name] and [Your Name]
       if(/name/i.test(m)) return m;
       if(/\d/.test(m)) return m;
-      return m; // placeholders are kept; bracket removal below handles filler sentences only
+      return m;
     });
-    // Remove filler sentences that hold no date, number, or name placeholder
     var fillerRe = /(thank you for your time|please do not hesitate|i hope this|i look forward to your response|it was a positive experience)/i;
     var originalWords = countWords(out);
     var target = Math.ceil(originalWords * 0.6);
-    // Split into paragraphs, then sentences, keeping track for rebuild
     var paraSep = out.indexOf("\n\n") > -1 ? "\n\n" : (out.indexOf("\n") > -1 ? "\n" : "\n\n");
     var paragraphs = out.split(/\n+/).filter(function(p){ return p.trim().length > 0; });
     var paraSentences = paragraphs.map(function(p){
       var parts = p.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [p];
       return parts.map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
     });
-    // First pass: drop filler sentences with no date, number, or placeholder
     paraSentences = paraSentences.map(function(sents, pi){
       return sents.filter(function(s, si){
         var isFirst = (pi === 0 && si === 0);
@@ -1036,7 +690,6 @@ Best, Saloni</div>
       var t = paraSentences.map(function(sents){ return sents.join(" "); }).join(" ");
       return countWords(t);
     }
-    // Second pass: drop longest middle sentences until about 40 percent shorter
     if(currentWords() > target){
       var candidates = [];
       paraSentences.forEach(function(sents, pi){
@@ -1044,32 +697,17 @@ Best, Saloni</div>
           var isFirstOverall = (pi === 0 && si === 0);
           var isQuestion = /\?\s*$/.test(s);
           var prot = isFirstOverall || hasDateOrNumber(s) || isQuestion || isSignOff(s) || /\[[^\]]+\]/.test(s);
-          // Closing question line: last question sentence in the text
           if(!prot) candidates.push({pi:pi, si:si, len:countWords(s), text:s});
         });
       });
-      // Protect the closing question: find last sentence ending with ?
       var lastQuestion = null;
       paraSentences.forEach(function(sents, pi){ sents.forEach(function(s, si){ if(/\?\s*$/.test(s)) lastQuestion = pi + ":" + si; }); });
       candidates = candidates.filter(function(c){ return (c.pi + ":" + c.si) !== lastQuestion; });
       candidates.sort(function(a,b){ return b.len - a.len; });
-      var drop = {};
       for(var i=0;i<candidates.length;i++){
         if(currentWords() <= target) break;
         var c = candidates[i];
-        drop[c.pi + ":" + c.si] = true;
-        // Tentatively remove for word count check on next loop: mark by rebuilding count
-        var saved = paraSentences[c.pi][c.si];
         paraSentences[c.pi][c.si] = "";
-        if(currentWords() <= target){
-          // keep dropped
-        }
-        // if still above target, continue dropping
-        if(currentWords() > target && i === candidates.length - 1){
-          // no more candidates
-        }
-        // keep the empty slot as dropped; do not restore
-        void(saved);
       }
       paraSentences = paraSentences.map(function(sents){ return sents.filter(function(s){ return s.trim().length > 0; }); });
     }
@@ -1102,7 +740,6 @@ Best, Saloni</div>
         return rep;
       });
     });
-    // Fix sentence-start case after expansion where the match was lower case at start
     out = out.replace(/(^\s*[a-z])|([.!?]\s+[a-z])/g, function(m){ return m.toUpperCase(); });
     return out;
   }
@@ -1121,9 +758,8 @@ Best, Saloni</div>
     ];
     var out = text;
     pairs.forEach(function(pair){
-      out = out.replace(pair[0], function(m, offset, full){
+      out = out.replace(pair[0], function(m){
         var rep = pair[1];
-        // Capitalize if the match starts a sentence or starts the text with a capital
         if(m.charAt(0) === m.charAt(0).toUpperCase()){
           rep = rep.charAt(0).toUpperCase() + rep.slice(1);
         }
@@ -1155,37 +791,237 @@ Best, Saloni</div>
     out = addContractions(out);
     out = out.replace(/Kind regards,?/gi, "Best,");
     out = out.replace(/Warm regards,?/gi, "Best,");
-    // End the sign-off block the same way the default profile does: Best, on its own, no name placeholder after it
     out = out.replace(/(Best,)\s*\[Your Name\]/g, "$1");
     out = out.replace(/(Best,)\s*\n\s*\[[^\]]+\]\s*$/, "$1");
     out = out.replace(/[ \t]{2,}/g, " ").trim();
     return out;
   }
 
-  document.getElementById("shortenBtn").addEventListener("click", function(){
-    var text = getAnswerOrNote();
-    if(text === null) return;
-    setAnswer(shortenText(text));
-  });
-  document.getElementById("formalBtn").addEventListener("click", function(){
-    var text = getAnswerOrNote();
-    if(text === null) return;
-    setAnswer(formalText(text));
-  });
-  document.getElementById("informalBtn").addEventListener("click", function(){
-    var text = getAnswerOrNote();
-    if(text === null) return;
-    setAnswer(informalText(text));
+  /* ---------- Output state ---------- */
+  var outputText = "";
+  var previousOutput = null;
+  var lastDraft = "";
+  var outArea = document.getElementById("rewriteOutput");
+  var answerActions = document.getElementById("answerActions");
+  var undoBtn = document.getElementById("undoBtn");
+  var compareView = document.getElementById("compareView");
+  var answerNote = document.getElementById("answerNote");
+
+  function setOutput(text){
+    outputText = text;
+    outArea.textContent = text;
+    answerActions.hidden = false;
+    compareView.hidden = true;
+    document.getElementById("compareBtn").textContent = "Compare";
+  }
+  function selectedStyle(){
+    var el = document.querySelector('input[name="style"]:checked');
+    return el ? el.value : "same";
+  }
+
+  document.getElementById("rewriteBtn").addEventListener("click", function(){
+    var draft = document.getElementById("draftText").value;
+    if(!draft.trim()){
+      answerNote.hidden = false;
+      answerNote.textContent = "Paste a draft first, then press Rewrite my draft.";
+      return;
+    }
+    answerNote.hidden = true;
+    var out = baseRewrite(draft);
+    var style = selectedStyle();
+    if(style === "shorter") out = shortenText(out);
+    else if(style === "formal") out = formalText(out);
+    else if(style === "casual") out = informalText(out);
+    lastDraft = draft;
+    previousOutput = null;
+    undoBtn.hidden = true;
+    setOutput(out);
+    outArea.scrollIntoView({behavior:"smooth", block:"nearest"});
   });
 
-  document.getElementById("copyRewriteBtn").addEventListener("click", function(){
-    var text = document.getElementById("rewriteOutput").textContent;
+  document.getElementById("copyBtn").addEventListener("click", function(){
     var btn = this;
+    if(!outputText) return;
     if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){ btn.textContent = "Copied"; setTimeout(function(){btn.textContent="Copy rewrite";},1800); });
+      navigator.clipboard.writeText(outputText).then(function(){
+        btn.textContent = "Copied";
+        setTimeout(function(){ btn.textContent = "Copy"; }, 1800);
+      });
     }
   });
 
+  document.getElementById("compareBtn").addEventListener("click", function(){
+    if(!outputText) return;
+    if(compareView.hidden){
+      document.getElementById("compareDraft").textContent = lastDraft || document.getElementById("draftText").value;
+      document.getElementById("compareRewrite").textContent = outputText;
+      compareView.hidden = false;
+      this.textContent = "Hide compare";
+    } else {
+      compareView.hidden = true;
+      this.textContent = "Compare";
+    }
+  });
+
+  document.getElementById("tryShorterBtn").addEventListener("click", function(){
+    if(!outputText) return;
+    previousOutput = outputText;
+    setOutput(shortenText(outputText));
+    undoBtn.hidden = false;
+  });
+  document.getElementById("tryCasualBtn").addEventListener("click", function(){
+    if(!outputText) return;
+    previousOutput = outputText;
+    setOutput(informalText(outputText));
+    undoBtn.hidden = false;
+  });
+  undoBtn.addEventListener("click", function(){
+    if(previousOutput === null) return;
+    setOutput(previousOutput);
+    previousOutput = null;
+    undoBtn.hidden = true;
+  });
+
+  /* ---------- Check mode ---------- */
+  var AI_TELLS = [
+    {key:"delve", label:"delve"},
+    {key:"leverage", label:"leverage (as a verb)"},
+    {key:"utilize", label:"utilize"},
+    {key:"seamless", label:"seamless"},
+    {key:"robust", label:"robust"},
+    {key:"circle back", label:"circle back"},
+    {key:"i hope this email finds you well", label:"I hope this email finds you well"},
+    {key:"please do not hesitate", label:"please do not hesitate"},
+    {key:"furthermore", label:"furthermore"},
+    {key:"pivotal", label:"pivotal"},
+    {key:"game-changer", label:"game-changer"},
+    {key:"game changer", label:"game changer"},
+    {key:"thank you for your time and consideration", label:"thank you for your time and consideration"},
+    {key:"i look forward to your response", label:"I look forward to your response (closing formula)"},
+    {key:"thank you for taking the time", label:"thank you for taking the time to engage (ceremonial)"},
+    {key:"i would like to extend an invitation", label:"I would like to extend an invitation"},
+    {key:"please let me know if you require any additional information", label:"please let me know if you require any additional information"}
+  ];
+
+  document.getElementById("checkBtn").addEventListener("click", function(){
+    var draft = document.getElementById("draftText").value.trim();
+    var notice = document.getElementById("checkNotice");
+    var box = document.getElementById("verdictBox");
+    if(wordsOf(draft).length < 8){
+      notice.hidden = false;
+      notice.textContent = "Paste a longer draft to check -- at least a couple of sentences.";
+      box.hidden = true;
+      return;
+    }
+    var profile = currentProfile;
+    var usedDemo = false;
+    if(!profile){
+      profile = demoProfile();
+      usedDemo = true;
+    }
+    if(isDefaultProfile){
+      notice.hidden = false;
+      notice.textContent = "Checking against the Standard profile -- a plain human voice.";
+    } else if(usedDemo){
+      notice.hidden = false;
+      notice.textContent = "No voice built yet, so this check uses the demo profile from the author's samples. Add your writing samples above for a check against your voice, or pick Standard.";
+    } else if(isDemoProfile){
+      notice.hidden = false;
+      notice.textContent = "Checking against the demo profile.";
+    } else {
+      notice.hidden = false;
+      notice.textContent = "Checking against your voice (" + profile.totalWords + " words measured from your samples).";
+    }
+    var d = analyze(draft);
+    var flags = [];
+    var lower = draft.toLowerCase();
+
+    if(d.emDash > 0){
+      flags.push("Em dash found ("+d.emDash+") -- your mark is \"--\", not an em dash. Every em dash is drift.");
+      d.sentences.forEach(function(s){
+        if(s.indexOf("\u2014")>-1 || s.indexOf("\u2013")>-1) flags.push("Line: \""+s.slice(0,140)+"\"");
+      });
+    }
+    if(/\d\s*--\s*\d/.test(draft)){
+      var rangeMatches = draft.match(/\d\s*--\s*\d/g) || [];
+      flags.push("Number range drift: a double hyphen between numbers is not correct. Ranges take a single hyphen only (for example 2-6, 3-8 PM, 10-15). Found "+rangeMatches.length+" range(s) to fix. A single hyphen between numbers is correct.");
+    }
+    AI_TELLS.forEach(function(t){
+      if(lower.indexOf(t.key) > -1){
+        flags.push("AI tell: <code>"+t.label+"</code> -- not in your voice profile. Cut it or say it plainly.");
+      }
+    });
+    if(isDefaultProfile){
+      if(d.excl > 1) flags.push("Exclamation drift for the Standard voice: at most 1, in the opening warmth line only. This draft uses "+d.excl+".");
+      if(lower.indexOf("kind regards") > -1) flags.push("Sign-off drift for the Standard voice: Kind regards is not the sign-off. The sign-off is <code>Best,</code> with no name after it in this path.");
+      if(lower.indexOf("i hope you will consider") > -1) flags.push("Closing drift: <code>I hope you will consider attending</code> is a formula. The Standard voice closes with a real question.");
+    }
+    var lenDiff = Math.abs(d.avgLen - profile.avgLen);
+    if(lenDiff > 5 && d.avgLen > profile.avgLen * 1.4){
+      flags.push("Sentence length drift: this draft averages "+d.avgLen+" words per sentence, your profile averages "+profile.avgLen+". It will read slower and more formal than you.");
+    } else if(lenDiff > 5 && d.avgLen < profile.avgLen * 0.6){
+      flags.push("Sentence length drift: this draft averages "+d.avgLen+" words per sentence, your profile averages "+profile.avgLen+". It reads choppier than you write.");
+    }
+    var profExclRate = profile.totalWords ? (profile.excl/profile.totalWords)*100 : 0;
+    var draftExclRate = d.totalWords ? (d.excl/d.totalWords)*100 : 0;
+    if(profile.excl === 0 && d.excl >= 2){
+      flags.push("Exclamation drift: your samples use 0 exclamation marks, this draft uses "+d.excl+". That forced warmth is not your habit.");
+    } else if(Math.abs(draftExclRate - profExclRate) > 4){
+      flags.push("Exclamation drift: draft uses "+d.excl+" ("+Math.round(draftExclRate*10)/10+" per 100 words) vs your habit of "+profile.excl+" in your samples.");
+    }
+    if(profile.dbl > 0 && d.dbl === 0 && d.totalWords > 40){
+      flags.push("Missing mark: your profile uses \"--\" "+profile.dbl+" time(s), this longer draft uses it 0 times. Not proof on its own, worth a look.");
+    }
+    if(profile.specificsPer100 != null && d.specificsPer100 != null){
+      if(profile.specificsPer100 >= 3 && d.specificsPer100 < profile.specificsPer100 * 0.5){
+        flags.push("Flat shape: the draft has " + fmtShapeNum(d.specificsPer100) + " specifics per 100 words. Your samples have " + fmtShapeNum(profile.specificsPer100) + ". The draft stays general where you get specific.");
+      }
+    }
+    if(profile.sentenceSpread != null && d.sentenceSpread != null){
+      if(profile.sentenceSpread >= 4 && d.sentenceSpread < profile.sentenceSpread * 0.4){
+        flags.push("Flat shape: your sentence lengths barely change. Your samples vary much more.");
+      }
+    }
+
+    var title, summary, cls;
+    if(flags.length === 0){
+      title = "Sounds like you";
+      summary = "No drift flags against this profile. Rhythm, marks, and word choice line up.";
+      cls = "verdict verdict-good";
+    } else if(flags.length <= 2){
+      title = "Mostly you";
+      summary = flags.length + " flag(s) -- close, with a few lines that drift. Fix those and it passes.";
+      cls = "verdict";
+    } else {
+      title = "Drifting";
+      summary = flags.length + " flags -- this reads more like generic AI than like your profile. Rewrite is your fastest fix.";
+      cls = "verdict";
+    }
+    document.getElementById("verdictTitle").textContent = title;
+    document.getElementById("verdictSummary").textContent = summary;
+    document.getElementById("flagList").innerHTML = flags.length ? flags.map(function(f){return "<li>"+f+"</li>";}).join("") : "<li>No flagged words, marks, or rhythm drift found.</li>";
+    document.getElementById("verdictStats").textContent = "Draft: " + d.totalWords + " words, " + d.avgLen + " words/sentence, " + d.excl + " exclamation(s), " + d.dbl + "x \"--\", " + d.emDash + "x em dash. Profile: " + profile.avgLen + " words/sentence.";
+    box.className = cls;
+    box.hidden = false;
+    box.scrollIntoView({behavior:"smooth", block:"nearest"});
+  });
+
+  /* ---------- Mode switching ---------- */
+  document.getElementById("toCheckLink").addEventListener("click", function(){
+    document.getElementById("rewriteControls").hidden = true;
+    document.getElementById("checkControls").hidden = false;
+    document.getElementById("checkTopBar").hidden = false;
+    document.getElementById("toCheckWrap").hidden = true;
+    document.getElementById("try").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("backToRewrite").addEventListener("click", function(){
+    document.getElementById("rewriteControls").hidden = false;
+    document.getElementById("checkControls").hidden = true;
+    document.getElementById("checkTopBar").hidden = true;
+    document.getElementById("toCheckWrap").hidden = false;
+  });
+
+  /* ---------- Docs copy buttons ---------- */
   document.querySelectorAll("[data-copy]").forEach(function(btn){
     btn.addEventListener("click", function(){
       var id = btn.getAttribute("data-copy");
@@ -1198,6 +1034,10 @@ Best, Saloni</div>
       }
     });
   });
+
+  /* ---------- Load state ---------- */
+  selectStandard();
+  document.getElementById("draftText").value = DEFAULT_TEST_DRAFT;
 })();
 </script>
 </body>
